@@ -62,5 +62,26 @@ namespace RulesEngineTests
             Assert.Equal(DiscountType.LongTimeDiscount, discount.Type);
             Assert.Equal(50, discount.Amount);
         }
+
+        [Fact]
+        public void StandardSubscriptionDiscountRuleTest()
+        {
+            var customer = new Customer
+            {
+                Id = "1",
+                Name = "John Doe",
+                StartDate = DateTime.UtcNow.AddYears(-5),
+                SubscriptionType = SubscriptionType.Standard
+            };
+
+            var sut = new StandardSubscriptionDiscountRule();
+
+            var isMatch = sut.IsMatch(customer);
+            var discount = sut.CalculateDiscount();
+
+            Assert.True(isMatch);
+            Assert.Equal(DiscountType.StandardSubscriptionDiscount, discount.Type);
+            Assert.Equal(5, discount.Amount);
+        }
     }
 }
